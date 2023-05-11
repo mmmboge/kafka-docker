@@ -14,8 +14,8 @@ services:
             KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
             KAFKA_CONTROLLER_QUORUM_VOTERS: 111@kafka-server1:9093,222@kafka-server2:9093,333@kafka-server3:9093
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-server1:9092
-            KAFKA_LISTENERS: CONTROLLER://:9093,PLAINTEXT://:9092
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-server1:29092,PLAINTEXT_HOST://localhost:9092
+            KAFKA_LISTENERS: PLAINTEXT://:29092,CONTROLLER://:9093,PLAINTEXT_HOST://:9092
 
 
   kafka-server2:
@@ -23,7 +23,7 @@ services:
     hostname: kafka-server2
     container_name: kafka-server2-c
     environment:
-            KAFKA_JMX_PORT: 9101
+            JMX_PORT: 9101
             KAFKA_NUM_PARTITIONS: 6
             KAFKA_DEFAULT_REPLICATION_FACTOR: 2
             KAFKA_NODE_ID: 222
@@ -32,8 +32,8 @@ services:
             KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
             KAFKA_CONTROLLER_QUORUM_VOTERS: 111@kafka-server1:9093,222@kafka-server2:9093,333@kafka-server3:9093
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-server2:9092
-            KAFKA_LISTENERS: CONTROLLER://:9093,PLAINTEXT://:9092
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-server2:29092,PLAINTEXT_HOST://localhost:9092
+            KAFKA_LISTENERS: PLAINTEXT://:29092,CONTROLLER://:9093,PLAINTEXT_HOST://:9092
 
 
   kafka-server3:
@@ -41,7 +41,7 @@ services:
     hostname: kafka-server3
     container_name: kafka-server3-c
     environment:
-            KAFKA_JMX_PORT: 9101
+            JMX_PORT: 9101
             KAFKA_NUM_PARTITIONS: 6
             KAFKA_DEFAULT_REPLICATION_FACTOR: 2
             KAFKA_NODE_ID: 333
@@ -50,17 +50,18 @@ services:
             KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
             KAFKA_CONTROLLER_QUORUM_VOTERS: 111@kafka-server1:9093,222@kafka-server2:9093,333@kafka-server3:9093
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-server3:9092
-            KAFKA_LISTENERS: CONTROLLER://:9093,PLAINTEXT://:9092
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-server3:29092,PLAINTEXT_HOST://localhost:9092
+            KAFKA_LISTENERS: PLAINTEXT://:29092,CONTROLLER://:9093,PLAINTEXT_HOST://:9092
 
   kafka-ui:
     image: damon/kafka-ui:latest
+    hostname: kafka-ui
     ports:
       - 8080:8080
     container_name: kafka-ui-c
     environment:
-            KAFKA_CLUSTERS_0_NAME: 网智平台
-            KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-server1:9092,kafka-server2:9092,kafka-server3:9092
+            KAFKA_CLUSTERS_0_NAME: local
+            KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-server1:29092,kafka-server2:29092,kafka-server3:29092
             KAFKA_CLUSTERS_0_METRICS_PORT: 9101
             SERVER_SERVLET_CONTEXT_PATH: /
             AUTH_TYPE: "LOGIN_FORM"
